@@ -1,4 +1,11 @@
 // frontend/src/components/HeatMap.tsx
+import React from 'react';               // brings in the React namespace
+// or, if you prefer the named‑type form:
+import type { FC } from 'react';
+
+// Option A – using the namespace
+const HeatMap: React.FC<{ words: string[] }> = ({ words }) => { … };
+
 interface Props {
   words: string[];
   // optional: you could pass the raw maps to compute intensity,
