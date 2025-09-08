@@ -176,9 +176,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/node": "^24.3.1",
-    "npx": "^10.2.2",
+    "npx": "^3.0.0",
     "ts-node-dev": "^2.0.0",
     "tsc": "^2.0.4",
     "typescript": "^5.9.2"
