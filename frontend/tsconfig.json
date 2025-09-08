@@ -6,6 +6,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "types": ["node", "react", "react-dom"],   // optional but explicit
     "moduleResolution": "node",
     "module": "esnext",
     "target": "esnext"

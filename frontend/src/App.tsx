@@ -1,80 +1,66 @@
 // frontend/src/App.tsx
-import { useState } from 'react';
-import { InputPane } from './components/InputPane';
-import { ResultPane } from './components/ResultPane';
-import { getScore } from './utils/api';
+import { useState } from "react";
+import InputPane from "./components/InputPane";
+import ResultPane from "./components/ResultPane";
+import HeatMap from "./components/HeatMap";
+import { getScore, ScoreResponse } from "./utils/api";
 
 function App() {
-  const [jobDesc, setJobDesc] = useState('');
-  const [resume, setResume] = useState('');
-  const [percent, setPercent] = useState<number | null>(null);
-  const [matched, setMatched] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [jobDesc, setJobDesc] = useState<string>("");
+  const [resume, setResume] = useState<string>("");
+  const [result, setResult] = useState<ScoreResponse | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
-  const handleCalculate = async () => {
+  const calculate = async () => {
     setLoading(true);
-    setError(null);
+    setError("");
     try {
-      const { percent, matchedWords } = await getScore(jobDesc, resume);
-      setPercent(percent);
-      setMatched(matchedWords);
-    } catch (e: any) {
-      setError(e?.response?.data?.error ?? 'Unexpected error');
+      const data = await getScore(jobDesc, resume);
+      setResult(data);
+    } catch (e) {
+      setError("Failed to contact the backend.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col p-6 bg-gray-50">
-      <header className="mb-6">
-        <h1 className="text-3xl font-bold">Resume Scorecard</h1>
-        <p className="text-gray-600">
-          Paste a job description on the left and your resume on the right –
-          get a similarity % and a heat‑map of matching keywords.
-        </p>
-      </header>
+    <div className="min-h-screen bg-gray-100 p-4">
+      <h1 className="text-2xl font-bold mb-4 text-center">
+        Resume Scorecard
+      </h1>
 
-      <div className="flex flex-1 gap-6">
-        {/* Left pane */}
-        <div className="flex-1 flex flex-col">
-          <InputPane
-            label="Job Description"
-            value={jobDesc}
-            setValue={setJobDesc}
-            placeholder="Paste the full job posting here..."
-          />
-        </div>
-
-        {/* Right pane */}
-        <div className="flex-1 flex flex-col">
-          <InputPane
-            label="Your Resume"
-            value={resume}
-            setValue={setResume}
-            placeholder="Paste your resume text (or copy‑paste from a PDF)…"
-          />
-        </div>
+      <div className="grid md:grid-cols-2 gap-4">
+        <InputPane
+          label="Job Description"
+          value={jobDesc}
+          onChange={setJobDesc}
+        />
+        <InputPane label="Your Résumé" value={resume} onChange={setResume} />
       </div>
 
       <div className="my-4 flex justify-center">
         <button
-          onClick={handleCalculate}
+          onClick={calculate}
           disabled={loading || !jobDesc || !resume}
-          className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+          className={`px-6 py-2 rounded ${
+            loading || !jobDesc || !resume
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
+          } text-white`}
         >
-          Calculate Score
+          {loading ? "Calculating…" : "Calculate Score"}
         </button>
       </div>
 
-      {/* Result panel */}
-      <ResultPane
-        percent={percent}
-        matchedWords={matched}
-        loading={loading}
-        error={error}
-      />
+      {error && <p className="text-red-600 text-center">{error}</p>}
+
+      {result && (
+        <ResultPane percent={result.percent}>
+          <HeatMap words={result.matchedWords} />
+        </ResultPane>
+      )}
     </div>
   );
 }
