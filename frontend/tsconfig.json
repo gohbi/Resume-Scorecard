@@ -9,10 +9,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "types": ["node", "react", "react-dom"],   // optional but explicit
     "moduleResolution": "node",
     "module": "esnext",
-    "target": "esnext"
+    "target": "esnext",
+
+
+    "types": ["node", "react", "react-dom"]
   },
   "include": ["src"]
 }
