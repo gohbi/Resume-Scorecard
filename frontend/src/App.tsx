@@ -1,7 +1,7 @@
 // frontend/src/App.tsx
 import { useState } from "react";
-import InputPane from "./components/InputPane";
-import ResultPane from "./components/ResultPane";
+import { InputPane } from "./components/InputPane";
+import { ResultPane } from "./components/ResultPane";
 import HeatMap from "./components/HeatMap";
 import { getScore, ScoreResponse } from "./utils/api";
 

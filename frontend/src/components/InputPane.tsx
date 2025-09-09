@@ -1,28 +1,23 @@
-// frontend/src/components/InputPane.tsx
-import { useState } from 'react';
+import React from "react";
 
-interface Props {
+interface InputPaneProps {
   label: string;
   value: string;
-  setValue: (v: string) => void;
-  placeholder?: string;
+  onChange: (v: string) => void;
 }
 
-export const InputPane: React.FC<Props> = ({
+/** Export as a named export */
+export const InputPane: React.FC<InputPaneProps> = ({
   label,
   value,
-  setValue,
-  placeholder,
-}) => {
-  return (
-    <div className="flex flex-col h-full">
-      <label className="font-medium mb-1">{label}</label>
-      <textarea
-        className="flex-grow p-2 border rounded resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
-    </div>
-  );
-};
+  onChange,
+}) => (
+  <div className="flex flex-col gap-2">
+    <label className="font-medium">{label}</label>
+    <textarea
+      className="border rounded p-2 h-40 resize-none"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    />
+  </div>
+);
